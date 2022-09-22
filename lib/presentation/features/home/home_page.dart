@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/variable_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
 class HomePage extends StatefulWidget {
@@ -21,6 +23,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void logoutUser() {
+    AppCache.clearAll();
+    Navigator.pushReplacementNamed(context, VariableConstant.SIGN_IN_ROUTE);
+  }
   @override
   Widget build(BuildContext context) {
     return PageContainer(
@@ -28,11 +34,18 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Home"),
         leading: IconButton(
           icon: Icon(Icons.logout),
-          onPressed: (){
-
-          },
+          onPressed: logoutUser,
         ),
         actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10, top: 10),
+            child: IconButton(
+              icon: Icon(Icons.history),
+              onPressed: () {
+
+              },
+            )
+          ),
           Consumer<HomeBloc>(
             builder: (context, bloc, child){
               return StreamBuilder<Cart>(
@@ -169,8 +182,8 @@ class _HomeContainerState extends State<HomeContainer> {
                       Row(
                           children:[
                             ElevatedButton(
-                              onPressed: () {
-
+                              onPressed: (){
+                                _homeBloc.eventSink.add(AddToCartEvent(id: product.id));
                               },
                               style: ButtonStyle(
                                   backgroundColor:

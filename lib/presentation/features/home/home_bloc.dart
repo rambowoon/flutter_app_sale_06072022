@@ -30,6 +30,9 @@ class HomeBloc extends BaseBloc{
       case GetCartEvent:
         _getCart();
         break;
+      case AddToCartEvent:
+        _addToCart(event as AddToCartEvent);
+        break;
     }
   }
 
@@ -62,6 +65,29 @@ class HomeBloc extends BaseBloc{
         }).toList(),
         cartResponse.data?.idUser,
         cartResponse.data?.price
+      );
+      cartController.sink.add(cart);
+    } on DioError catch (e) {
+      cartController.sink.addError(e.response?.data["message"]);
+      messageSink.add(e.response?.data["message"]);
+    } catch (e) {
+      messageSink.add(e.toString());
+    }
+    loadingSink.add(false);
+  }
+
+  void _addToCart(AddToCartEvent event) async {
+    loadingSink.add(true);
+    try {
+      Response response = await _repository.addToCart(event.id);
+      AppResponse<CartDto> cartResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
+      Cart cart = Cart(
+          cartResponse.data?.id,
+          cartResponse.data?.products?.map((dto){
+            return Product(dto.id, dto.name, dto.address, dto.price, dto.img, dto.quantity, dto.gallery);
+          }).toList(),
+          cartResponse.data?.idUser,
+          cartResponse.data?.price
       );
       cartController.sink.add(cart);
     } on DioError catch (e) {

@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "QuickSan",
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       routes: {
         VariableConstant.SIGN_IN_ROUTE: (context) => SignInPage(),
         VariableConstant.SIGN_UP_ROUTE: (context) => SignUpPage(),
