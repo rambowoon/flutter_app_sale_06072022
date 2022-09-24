@@ -7,4 +7,5 @@ class ApiConstant {
   static final String LIST_PRODUCT_URL = "/product";
   static final String CART_URL = "/cart";
   static final String ADD_TO_CART_URL = "/cart/add";
+  static final String UPDATE_CART_URL = "/cart/update";
 }

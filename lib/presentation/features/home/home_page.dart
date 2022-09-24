@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             child: IconButton(
               icon: Icon(Icons.history),
               onPressed: () {
-
+                Navigator.pushNamed(context, VariableConstant.ORDER_HISTORY_ROUTE);
               },
             )
           ),
@@ -60,7 +60,12 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.only(right: 10, top: 10),
                       child: Badge(
                         badgeContent: Text(count.toString(), style: const TextStyle(color: Colors.white),),
-                        child: Icon(Icons.shopping_cart_outlined),
+                        child: IconButton(
+                          icon: Icon(Icons.shopping_cart_outlined),
+                          onPressed: () {
+                            Navigator.pushNamed(context, VariableConstant.CART_ROUTE);
+                          },
+                        )
                       ),
                     );
                   }

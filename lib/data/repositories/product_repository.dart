@@ -13,4 +13,8 @@ class ProductRepository extends BaseRepository{
   Future addToCart(String id) {
     return apiRequest.addToCart(id);
   }
+
+  Future updateCart(String idCart, int quantity, String idProduct) {
+    return apiRequest.updateCart(idCart, quantity, idProduct);
+  }
 }
