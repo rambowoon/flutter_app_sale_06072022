@@ -24,6 +24,9 @@ class CartBloc extends BaseBloc{
       case GetCartEvent:
         _getCart();
         break;
+      case UpdateCartEvent:
+        _updateCart(event as UpdateCartEvent);
+        break;
     }
   }
 

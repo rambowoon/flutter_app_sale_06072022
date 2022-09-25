@@ -7,9 +7,16 @@ class GetCartEvent extends BaseEvent {
 
 class UpdateCartEvent extends BaseEvent {
   String idCart;
-  int quantity;
+  num quantity;
   String idProduct;
   UpdateCartEvent({required this.idCart, required this.quantity, required this.idProduct});
+  @override
+  List<Object?> get props => [];
+}
+
+class CartConformEvent extends BaseEvent {
+  String idCart;
+  CartConformEvent({required this.idCart});
   @override
   List<Object?> get props => [];
 }

@@ -67,6 +67,7 @@ class CartContainer extends StatefulWidget {
 }
 
 class _CartContainerState extends State<CartContainer> {
+  Cart? _cartModel;
   late CartBloc _cartBloc;
 
   @override
@@ -87,18 +88,56 @@ class _CartContainerState extends State<CartContainer> {
                   stream: _cartBloc.cartController.stream,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Container(
-                        child: Center(child: Text("Data error")),
+                      return const Center(child: Text("Data error"));
+                    }
+                    _cartModel = snapshot.data;
+                    if (snapshot.data!.products.isEmpty) {
+                      return const Center(
+                          child: Text(
+                            'Your Cart is Empty',
+                            style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+                          )
                       );
                     }
-                    if (snapshot.hasData && snapshot.data == []) {
-                      return Container();
-                    }
-                    return ListView.builder(
-                        itemCount: snapshot.data?.products?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          return _buildItemCart(snapshot.data?.products?[index]);
-                        }
+                    return Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data?.products?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return _buildItemCart(snapshot.data?.products?[index]);
+                              }
+                          )
+                        ),
+                        Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.teal,
+                                borderRadius: BorderRadius.all(Radius.circular(5))),
+                            child: Text(
+                                "Tổng tiền : " +
+                                    NumberFormat("#,###", "en_US")
+                                        .format(_cartModel?.price) +
+                                    " đ",
+                                style: TextStyle(fontSize: 25, color: Colors.white))),
+                        Container(
+                            padding: EdgeInsets.all(20),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_cartModel != null) {
+                                  String? cartId = _cartModel!.id;
+                                  _cartBloc.eventSink.add(CartConformEvent(idCart: cartId));
+                                }
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.deepOrange)),
+                              child: Text("Confirm",
+                                  style: TextStyle(color: Colors.white, fontSize: 25)),
+                            )),
+                      ],
                     );
                   }
               ),
@@ -108,6 +147,7 @@ class _CartContainerState extends State<CartContainer> {
               )
             ],
           ),
+
         )
     );
   }
@@ -157,6 +197,15 @@ class _CartContainerState extends State<CartContainer> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
+                              if(product != null && _cartModel != null) {
+                                String? cartId = _cartModel!.id;
+                                if(cartId.isNotEmpty) {
+                                  _cartBloc.eventSink.add(UpdateCartEvent(
+                                      idCart: cartId,
+                                      idProduct: product.id,
+                                      quantity: product.quantity - 1));
+                                }
+                              }
                             },
                             child: Text("-"),
                           ),
@@ -167,7 +216,15 @@ class _CartContainerState extends State<CartContainer> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-
+                              if(product != null && _cartModel != null) {
+                                String? cartId = _cartModel!.id;
+                                if(cartId.isNotEmpty) {
+                                  _cartBloc.eventSink.add(UpdateCartEvent(
+                                      idCart: cartId,
+                                      idProduct: product.id,
+                                      quantity: product.quantity + 1));
+                                }
+                              }
                             },
                             child: Text("+"),
                           ),
