@@ -63,7 +63,11 @@ class _HomePageState extends State<HomePage> {
                         child: IconButton(
                           icon: Icon(Icons.shopping_cart_outlined),
                           onPressed: () {
-                            Navigator.pushNamed(context, VariableConstant.CART_ROUTE);
+                            Navigator.pushNamed(context, VariableConstant.CART_ROUTE).then((cartUpdate){
+                              if(cartUpdate != null){
+                                bloc.cartController.sink.add(cartUpdate as Cart);
+                              }
+                            });
                           },
                         )
                       ),

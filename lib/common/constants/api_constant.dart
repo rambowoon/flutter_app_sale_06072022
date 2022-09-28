@@ -8,4 +8,5 @@ class ApiConstant {
   static final String CART_URL = "/cart";
   static final String ADD_TO_CART_URL = "/cart/add";
   static final String UPDATE_CART_URL = "/cart/update";
+  static final String CONFORM_CART_URL = "/cart/conform";
 }
