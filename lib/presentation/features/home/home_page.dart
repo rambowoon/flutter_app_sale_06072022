@@ -214,6 +214,7 @@ class _HomeContainerState extends State<HomeContainer> {
                               padding: const EdgeInsets.only(left: 5),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  Navigator.pushNamed(context, VariableConstant.PRODUCT_ROUTE, arguments: product);
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:
@@ -227,7 +228,11 @@ class _HomeContainerState extends State<HomeContainer> {
                                     shape: MaterialStateProperty.all(
                                         const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(10))))),
+                                                Radius.circular(10)
+                                            )
+                                        )
+                                    )
+                                ),
                                 child:
                                 Text("Chi tiết", style: const TextStyle(fontSize: 14)),
                               ),
