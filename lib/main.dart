@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
         VariableConstant.HOME_ROUTE: (context) => HomePage(),
         VariableConstant.CART_ROUTE: (context) => CartPage(),
         VariableConstant.PRODUCT_ROUTE: (context) => ProductPage(),
+        VariableConstant.ORDER_HISTORY_ROUTE: (context) => OrderHistoryPage(),
+        VariableConstant.ORDER_HISTORY_DETAIL_ROUTE: (context) => OrderHistoryDetailPage(),
         VariableConstant.SPLASH_ROUTE: (context) => SplashPage(),
       },
       initialRoute: VariableConstant.SPLASH_ROUTE,
