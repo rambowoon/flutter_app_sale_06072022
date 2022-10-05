@@ -44,5 +44,7 @@ class OrderDto {
     return map;
   }
 
-  static OrderDto convertJson(dynamic json) => OrderDto.fromJson(json);
+  static List<OrderDto> convertJson(dynamic json) {
+    return (json as List).map((e) => OrderDto.fromJson(e)).toList();
+  }
 }

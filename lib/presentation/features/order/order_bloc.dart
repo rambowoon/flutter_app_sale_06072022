@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_app_sale_06072022/common/bases/base_bloc.dart';
 import 'package:flutter_app_sale_06072022/common/bases/base_event.dart';
-import 'package:flutter_app_sale_06072022/data/model/cart.dart';
 import 'package:flutter_app_sale_06072022/data/model/product.dart';
 import 'package:flutter_app_sale_06072022/data/repositories/product_repository.dart';
 import 'package:flutter_app_sale_06072022/presentation/features/order/order_event.dart';
@@ -16,7 +15,7 @@ class OrderBloc extends BaseBloc{
   StreamController<List<Order>> listOrderController = StreamController();
   late ProductRepository _repository;
 
-  void updateProductRepository(ProductRepository productRepository) {
+  void updateOrderRepository(ProductRepository productRepository) {
     _repository = productRepository;
   }
 
@@ -32,13 +31,26 @@ class OrderBloc extends BaseBloc{
   void _getListOrder() async{
     loadingSink.add(true);
     try {
+
       Response response = await _repository.getListOrders();
       AppResponse<List<OrderDto>> listOrderResponse = AppResponse.fromJson(response.data, OrderDto.convertJson);
-      List<Order>? listOrder = listOrderResponse.data?.map((dto){
 
-        return Order(dto.id, dto.products, dto.idUser, dto.price, dto.status, dto.dateCreated);
-      }).toList();
-      listOrderController.add(listOrder ?? []);
+      List<Order> orders = [];
+      listOrderResponse.data?.forEach((item) {
+        Order order = Order(
+          item.id,
+          item.products?.map((dto){
+            return Product(dto.id, dto.name, dto.address, dto.price, dto.img, dto.quantity, dto.gallery);
+          }).toList(),
+          item.idUser,
+          item.price,
+          item.status,
+          item.dateCreated,
+        );
+        orders.add(order);
+      });
+
+      listOrderController.add(orders);
     } on DioError catch (e) {
       messageSink.add(e.response?.data["message"]);
     } catch (e) {

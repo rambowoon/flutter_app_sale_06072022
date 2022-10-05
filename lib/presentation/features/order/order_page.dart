@@ -74,7 +74,7 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
   void initState() {
     super.initState();
     _orderBloc = context.read<OrderBloc>();
-    _orderBloc.eventSink.add(GetOrderEvent());
+    _orderBloc.eventSink.add(GetListOrderEvent());
   }
 
   @override
@@ -90,7 +90,7 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
               children: [
                 StreamBuilder<List<Order>>(
                     initialData: null,
-                    stream: _orderBloc.orderController.stream,
+                    stream: _orderBloc.listOrderController.stream,
                     builder: (context, snapshot) {
                       print(snapshot);
                       if (snapshot.hasError) {
@@ -153,7 +153,7 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
         elevation: 2,
         child: InkWell(
           onTap: (){
-            Navigator.pushNamed(context, VariableConstant.ORDER_DETAIL_ROUTE, arguments: order);
+            Navigator.pushNamed(context, VariableConstant.ORDER_HISTORY_DETAIL_ROUTE, arguments: order);
           },
           child: Container(
             child: Row(
