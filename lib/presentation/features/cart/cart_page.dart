@@ -24,7 +24,7 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: const Text("My Shopping Cart"),
+        title: const Text("Giỏ hàng"),
         actions: [
           Container(
               margin: EdgeInsets.only(right: 10, top: 10),
@@ -126,38 +126,54 @@ class _CartContainerState extends State<CartContainer> {
                                     }
                                 )
                             ),
-                            Container(
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: Colors.teal,
-                                    borderRadius: BorderRadius.all(Radius
-                                        .circular(5))),
-                                child: Text(
-                                    "Tổng tiền : " +
-                                        NumberFormat("#,###", "en_US")
-                                            .format(_cartModel?.price) +
-                                        " đ",
-                                    style: TextStyle(fontSize: 25,
-                                        color: Colors.white))),
-                            Container(
-                                padding: EdgeInsets.all(20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (_cartModel != null) {
-                                      String? cartId = _cartModel!.id;
-                                      _cartBloc.eventSink.add(
-                                          CartConformEvent(idCart: cartId));
-                                    }
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                      MaterialStateProperty.all(
-                                          Colors.deepOrange)),
-                                  child: Text("Đặt hàng",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 25)),
-                                )),
+                            TopRoundedContainer(
+                              color: Colors.white,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: 10,
+                                  bottom: getProportionateScreenWidth(10, context),
+                                  top: getProportionateScreenWidth(5, context),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.symmetric(vertical: 10),
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(Radius
+                                                .circular(5))),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                                "Tổng tiền : ",
+                                                style: TextStyle(fontSize: 20,
+                                                    color: Colors.black)
+                                            ),
+                                            Text(NumberFormat("#,###", "en_US")
+                                                        .format(_cartModel?.price) +
+                                                    " đ",
+                                                style: TextStyle(fontSize: 20,
+                                                    color: Colors.red)
+                                            ),
+                                          ],
+                                        )
+                                    ),
+                                    DefaultButton(
+                                      text: "Đặt hàng",
+                                      press: () {
+                                        if (_cartModel != null) {
+                                          String? cartId = _cartModel!.id;
+                                          _cartBloc.eventSink.add(
+                                              CartConformEvent(idCart: cartId));
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       }
@@ -264,4 +280,78 @@ class _CartContainerState extends State<CartContainer> {
       ),
     );
   }
+}
+class TopRoundedContainer extends StatelessWidget {
+  const TopRoundedContainer({
+    Key? key,
+    required this.color,
+    required this.child,
+  }) : super(key: key);
+
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: getProportionateScreenWidth(20, context)),
+      padding: EdgeInsets.only(top: getProportionateScreenWidth(0, context)),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class DefaultButton extends StatelessWidget {
+  const DefaultButton({
+    Key? key,
+    this.text,
+    this.press,
+  }) : super(key: key);
+  final String? text;
+  final Function? press;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: getProportionateScreenHeight(56, context),
+      child: TextButton(
+        style: TextButton.styleFrom(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          primary: Colors.white,
+          backgroundColor: Color(0xFFFF7643),
+        ),
+        onPressed: press as void Function()?,
+        child: Text(
+          text!,
+          style: TextStyle(
+            fontSize: getProportionateScreenWidth(18, context),
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+double getProportionateScreenHeight(double inputHeight, BuildContext context) {
+  double screenHeight = MediaQuery.of(context).size.height;
+  // 812 is the layout height that designer use
+  return (inputHeight / 812.0) * screenHeight;
+}
+
+// Get the proportionate height as per screen size
+double getProportionateScreenWidth(double inputWidth, BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+  // 375 is the layout width that designer use
+  return (inputWidth / 375.0) * screenWidth;
 }

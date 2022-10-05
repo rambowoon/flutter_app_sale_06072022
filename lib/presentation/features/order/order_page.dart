@@ -24,7 +24,7 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: const Text("Orders history"),
+        title: const Text("Đơn hàng đã đặt"),
         actions: [
           Container(
               margin: EdgeInsets.only(right: 10, top: 10),

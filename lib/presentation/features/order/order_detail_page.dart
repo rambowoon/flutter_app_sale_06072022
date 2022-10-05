@@ -20,7 +20,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Order detail"),
+        title: const Text("Chi tiết đơn hàng"),
         actions: [
           Container(
               child: IconButton(
@@ -87,7 +87,7 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
                     }
                 )
             ),
-            Expanded(
+            Container(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

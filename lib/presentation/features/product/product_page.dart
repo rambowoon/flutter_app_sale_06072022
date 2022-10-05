@@ -118,7 +118,7 @@ class _ProductContainerState extends State<ProductContainer> {
         Column(
           children: [
             SizedBox(
-              width: getProportionateScreenWidth(260,context),
+              height: getProportionateScreenWidth(250,context),
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Hero(
@@ -157,10 +157,18 @@ class _ProductContainerState extends State<ProductContainer> {
                       horizontal: getProportionateScreenWidth(20, context),
                       vertical: 5,
                     ),
-                    child: Text(
-                        "Giá : ${NumberFormat("#,###", "en_US")
-                            .format(product!.price)} đ",
-                        style: const TextStyle(fontSize: 16, color: Colors.red)
+                    child: Row(
+                      children: [
+                        Text(
+                            "Giá : ",
+                            style: const TextStyle(fontSize: 16, color: Colors.black)
+                        ),
+                        Text(
+                            "${NumberFormat("#,###", "en_US")
+                                .format(product!.price)} đ",
+                            style: const TextStyle(fontSize: 16, color: Colors.red)
+                        )
+                      ],
                     ),
                   ),
                   Padding(
@@ -214,8 +222,8 @@ class _ProductContainerState extends State<ProductContainer> {
         duration: Duration(milliseconds: 250),
         margin: EdgeInsets.only(right: 15),
         padding: EdgeInsets.all(5),
-        height: getProportionateScreenHeight(48, context),
-        width: getProportionateScreenWidth(48, context),
+        height: getProportionateScreenHeight(60, context),
+        width: getProportionateScreenWidth(60, context),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
