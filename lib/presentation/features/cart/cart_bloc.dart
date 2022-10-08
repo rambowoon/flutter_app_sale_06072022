@@ -83,6 +83,7 @@ class CartBloc extends BaseBloc{
       _repository.conformCart(event.idCart);
       Cart cart = Cart("", [], "", -1);
       cartController.sink.add(cart);
+      progressSink.add(CartConformSuccessEvent(message: "Đặt hàng thành công"));
     } on DioError catch (e) {
       cartController.sink.addError(e.response?.data["message"]);
       messageSink.add(e.response?.data["message"]);

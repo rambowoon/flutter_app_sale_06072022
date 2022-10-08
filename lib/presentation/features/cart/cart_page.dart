@@ -1,12 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_app_sale_06072022/common/bases/base_widget.dart';
 import 'package:flutter_app_sale_06072022/data/model/product.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/variable_constant.dart';
+import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../common/widgets/progress_listener_widget.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
 import '../../../data/repositories/product_repository.dart';
@@ -95,7 +99,7 @@ class _CartContainerState extends State<CartContainer> {
                       if (snapshot.hasError) {
                         return const Center(
                             child: Text(
-                              'Your Cart is Empty',
+                              'Data Error',
                               style:
                               TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18.0),
@@ -105,13 +109,8 @@ class _CartContainerState extends State<CartContainer> {
                       if (snapshot.hasData) {
                         _cartModel = snapshot.data;
                         if (snapshot.data!.products.isEmpty) {
-                          return const Center(
-                              child: Text(
-                                'Your Cart is Empty',
-                                style:
-                                TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18.0),
-                              )
+                          return Center(
+                              child: Image.asset("assets/images/empty.png")
                           );
                         }
                         return Column(
@@ -163,10 +162,16 @@ class _CartContainerState extends State<CartContainer> {
                                     DefaultButton(
                                       text: "Đặt hàng",
                                       press: () {
-                                        if (_cartModel != null) {
-                                          String? cartId = _cartModel!.id;
-                                          _cartBloc.eventSink.add(
-                                              CartConformEvent(idCart: cartId));
+                                        String token = AppCache.getString(VariableConstant.TOKEN);
+                                        if (token.isNotEmpty) {
+                                          if (_cartModel != null) {
+                                            String? cartId = _cartModel!.id;
+                                            _cartBloc.eventSink.add(
+                                                CartConformEvent(idCart: cartId)
+                                            );
+                                          }
+                                        } else {
+                                          Navigator.pushReplacementNamed(context, VariableConstant.SIGN_IN_ROUTE);
                                         }
                                       },
                                     ),
@@ -180,13 +185,21 @@ class _CartContainerState extends State<CartContainer> {
                       return Container();
                     }
                 ),
+                ProgressListenerWidget<CartBloc>(
+                  callback: (event) {
+                    if (event is CartConformSuccessEvent) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+                      Navigator.pushReplacementNamed(context, VariableConstant.HOME_ROUTE);
+                    }
+                  },
+                  child: Container(),
+                ),
                 LoadingWidget(
                   bloc: _cartBloc,
                   child: Container(),
                 )
               ],
             ),
-
           )
       ),
     );
@@ -227,12 +240,19 @@ class _CartContainerState extends State<CartContainer> {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 16)),
                       ),
-                      Text(
-                          "Giá : " +
-                              NumberFormat("#,###", "en_US")
-                                  .format(product?.price) +
+                      Row(
+                        children: [
+                          Text(
+                              "Giá : ",
+                              style: TextStyle(fontSize: 14)),
+                          Text(NumberFormat("#,###", "en_US")
+                              .format(product?.price) +
                               " đ",
-                          style: TextStyle(fontSize: 12)),
+                              style: TextStyle(fontSize: 14,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       Row(
                         children: [
                           ElevatedButton(

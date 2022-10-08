@@ -127,9 +127,6 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
       child: Card(
         elevation: 2,
         child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, VariableConstant.ORDER_HISTORY_DETAIL_ROUTE);
-          },
           child: Container(
             child: Row(
               children: [
@@ -170,7 +167,7 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
                         Row(
                           children: [
                             Text(
-                                "Price : ",
+                                "Giá : ",
                                 style: TextStyle(fontSize: 12)),
                             Text(NumberFormat("#,###", "en_US")
                                 .format(product.price) +
@@ -180,7 +177,6 @@ class _BuildContainerOrderState extends State<BuildContainerOrder> {
                                     fontWeight: FontWeight.bold)),
                           ],
                         ),
-
                       ],
                     ),
                   ),

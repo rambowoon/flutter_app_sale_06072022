@@ -9,7 +9,6 @@ import 'package:flutter_app_sale_06072022/presentation/features/product/product_
 import 'package:flutter_app_sale_06072022/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter_app_sale_06072022/presentation/features/sign_up/sign_up_page.dart';
 import 'package:flutter_app_sale_06072022/presentation/features/splash/splash_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());

@@ -184,10 +184,19 @@ class _HomeContainerState extends State<HomeContainer> {
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 16)),
                       ),
-                      Text(
-                          "Giá : ${NumberFormat("#,###", "en_US")
-                                  .format(product.price)} đ",
-                          style: const TextStyle(fontSize: 12)),
+                      Row(
+                        children: [
+                          Text(
+                              "Giá : ",
+                              style: TextStyle(fontSize: 14)),
+                          Text(NumberFormat("#,###", "en_US")
+                              .format(product.price) +
+                              " đ",
+                              style: TextStyle(fontSize: 14,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       Row(
                           children:[
                             ElevatedButton(
@@ -213,8 +222,12 @@ class _HomeContainerState extends State<HomeContainer> {
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, VariableConstant.PRODUCT_ROUTE, arguments: product);
+                                onPressed: () async{
+                                  await Navigator.pushNamed(context, VariableConstant.PRODUCT_ROUTE, arguments: product).then((value){
+                                    if(value!=null){
+                                      _homeBloc.eventSink.add(GetCartEvent());
+                                    }
+                                  });
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:

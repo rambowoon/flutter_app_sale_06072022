@@ -243,6 +243,8 @@ class _SignInContainerState extends State<SignInContainer> {
               child: Text("Login",
                   style: TextStyle(fontSize: 18, color: Colors.white)),
               onPressed: () => onPress(),
-            )));
+            )
+        )
+    );
   }
 }
